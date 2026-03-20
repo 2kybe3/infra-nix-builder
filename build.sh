@@ -7,6 +7,7 @@ echo_cmd() {
     echo -e "${GREEN}+ $*${NC}"
 }
 
+read -r json <<< "$1"
 REPO_URL=$(echo "$json" | jq -r '.repo')
 TARGET_HOST=$(echo "$json" | jq -r '.host')
 TARGET_IP=$(echo "$json" | jq -r '.ip')
