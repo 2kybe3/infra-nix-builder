@@ -1,0 +1,7 @@
+keys:
+  - &nix-builder age17n6fg2w2gfs4tqwgac9vw4xzs6xlkpdzfa0c9wqvfkz3utqxrg2sssewe8
+creation_rules:
+  - path_regex: secrets/(notes\.txt|caddy_public_private)$
+    key_groups:
+      - age:
+        - *nix-builder

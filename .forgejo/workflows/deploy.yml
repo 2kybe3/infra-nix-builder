@@ -1,0 +1,41 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - main
+
+env:
+  REPO_URL: https://git.kybe.xyz/2kybe3/infra-nix-builder.git
+
+  BUILDER_USERNAME: ci
+  BUILDER_IP: nix-builder.internal.kybe.xyz
+
+  TARGET_USERNAME: root
+  TARGET_HOSTNAME: nix-builder
+  TARGET_IP: nix-builder.internal.kybe.xyz
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/key
+          chmod 600 ~/.ssh/key
+          ssh-keyscan -H $TARGET_IP >> ~/.ssh/known_hosts
+
+      - name: Deploy
+        run: |
+          json=$(jq -n \
+            --arg repo "$REPO_URL" \
+            --arg host "$TARGET_HOSTNAME" \
+            --arg ip "$TARGET_IP" \
+            --arg user "$TARGET_USERNAME" \
+            '{repo: $repo, host: $host, ip: $ip, user: $user}')
+
+          ssh -i ~/.ssh/key $BUILDER_USERNAME@$BUILDER_IP "build '$json'"
+
+      - name: Cleanup SSH
+        run: |
+          rm -rf ~/.ssh
