@@ -58,6 +58,7 @@
 
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM7irWuDZwx7ZvPSiUwBbxUxKL/7aMQmy/8oxput1bID kybe@knx"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDNzgml2ZFcWJzkRal3VwUNx0w23yUTqUNvWw4Q1m7FR nix-builder -> nix-builder"
   ];
 
   nix.settings.experimental-features = [
