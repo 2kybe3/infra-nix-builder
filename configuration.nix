@@ -2,27 +2,28 @@
   self,
   pkgs,
   ...
-}: {
+}: let
+  keys = [
+    "nix_builder"
+    "caddy_public_private"
+  ];
+in {
   imports = [
     ./proxmox.nix
     ./utils.nix
     ./sops.nix
   ];
 
-  sops.secrets = {
-    "nix_builder" = {
-      sopsFile = "${self}/secrets/nix_builder";
-      path = "/home/ci/.ssh/nix_builder";
-      format = "binary";
-      owner = "ci";
-    };
-    "caddy_public_private" = {
-      sopsFile = "${self}/secrets/caddy_public_private";
-      path = "/home/ci/.ssh/caddy_public_private";
-      format = "binary";
-      owner = "ci";
-    };
-  };
+  sops.secrets = builtins.listToAttrs (map (name: {
+      name = name;
+      value = {
+        sopsFile = "${self}/secrets/${name}";
+        path = "/home/ci/.ssh/${name}";
+        format = "binary";
+        owner = "ci";
+      };
+    })
+    keys);
 
   environment.systemPackages = with pkgs; [
     gnupg
@@ -47,11 +48,13 @@
     isNormalUser = true;
     extraGroups = ["wheel"];
 
-    openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM7irWuDZwx7ZvPSiUwBbxUxKL/7aMQmy/8oxput1bID kybe@knx"
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDeptJ/WeiQ3wuCpkHYAfSdH5h5l6kbJFSkiM/g7pZjZ git.kybe.xyz (infra-caddy) -> nix-builder"
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIODsU2Eyfj0bdNumTw9HW6yDukyNxNdc5q7JK7ONLeMm git.kybe.xyz (infra-nix-builder) -> nix-builder"
-    ];
+    openssh.authorizedKeys = {
+      keys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM7irWuDZwx7ZvPSiUwBbxUxKL/7aMQmy/8oxput1bID kybe@knx"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDeptJ/WeiQ3wuCpkHYAfSdH5h5l6kbJFSkiM/g7pZjZ git.kybe.xyz (infra-caddy) -> nix-builder"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIODsU2Eyfj0bdNumTw9HW6yDukyNxNdc5q7JK7ONLeMm git.kybe.xyz (infra-nix-builder) -> nix-builder"
+      ];
+    };
   };
   security.sudo.wheelNeedsPassword = false;
 
