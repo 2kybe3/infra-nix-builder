@@ -9,11 +9,19 @@
     ./sops.nix
   ];
 
-  sops.secrets."caddy_public_private" = {
-    sopsFile = "${self}/secrets/caddy_public_private";
-    path = "/home/ci/.ssh/caddy_public_private";
-    format = "binary";
-    owner = "ci";
+  sops.secrets = {
+    "nix_builder" = {
+      sopsFile = "${self}/secrets/nix_builder";
+      path = "/home/ci/.ssh/nix_builder";
+      format = "binary";
+      owner = "ci";
+    };
+    "caddy_public_private" = {
+      sopsFile = "${self}/secrets/caddy_public_private";
+      path = "/home/ci/.ssh/caddy_public_private";
+      format = "binary";
+      owner = "ci";
+    };
   };
 
   environment.systemPackages = with pkgs; [
