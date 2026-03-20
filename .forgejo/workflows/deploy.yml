@@ -17,6 +17,9 @@ env:
 jobs:
   deploy:
     runs-on: self-hosted
+    container:
+      image: ghcr.io/catthehacker/ubuntu:act-latest
+
     steps:
       - name: Set up SSH
         run: |
