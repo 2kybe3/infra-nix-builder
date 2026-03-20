@@ -35,7 +35,7 @@ jobs:
             --arg host "$TARGET_HOSTNAME" \
             --arg ip "$TARGET_IP" \
             --arg user "$TARGET_USERNAME" \
-            '{repo: $repo, host: $host, ip: $ip, user: $user}') \
+            '{repo: $repo, host: $host, ip: $ip, user: $user}' \
             > deploy.json
 
           scp -i ~/.ssh/key deploy.json $BUILDER_USERNAME@$BUILDER_IP:/tmp/deploy.json
