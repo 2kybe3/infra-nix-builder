@@ -66,5 +66,9 @@
     "flakes"
   ];
 
+  networking.nameservers = [
+    "10.0.4.1"
+  ];
+
   system.stateVersion = "25.05";
 }
