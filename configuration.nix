@@ -4,6 +4,7 @@
   ...
 }: let
   keys = [
+    "nix_main"
     "nix_builder"
     "caddy_public_private"
   ];
