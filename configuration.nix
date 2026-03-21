@@ -12,6 +12,7 @@ in {
   imports = [
     ./proxmox.nix
     ./utils.nix
+    ./attic.nix
     ./sops.nix
   ];
 
