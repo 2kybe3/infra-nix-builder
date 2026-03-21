@@ -53,6 +53,7 @@ in {
       keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM7irWuDZwx7ZvPSiUwBbxUxKL/7aMQmy/8oxput1bID kybe@knx"
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDeptJ/WeiQ3wuCpkHYAfSdH5h5l6kbJFSkiM/g7pZjZ git.kybe.xyz (infra-caddy) -> nix-builder"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOzHEdANrzJkiRCD+WdoGhJieehwxuuXevLaNUPp83Ki git.kybe.xyz (infra-nix-main) -> nix-builder"
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIODsU2Eyfj0bdNumTw9HW6yDukyNxNdc5q7JK7ONLeMm git.kybe.xyz (infra-nix-builder) -> nix-builder"
       ];
     };
