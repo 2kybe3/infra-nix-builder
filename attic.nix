@@ -14,6 +14,7 @@
     attic-server
   ];
 
+  networking.firewall.allowedTCPPorts = [ 8080 ];
   services.atticd = {
     enable = true;
     mode = "monolithic";
