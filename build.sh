@@ -35,3 +35,6 @@ nixos-rebuild switch \
     --upgrade \
     --sudo \
     --verbose
+
+echo_cmd "ssh $TARGET_USER@$TARGET_IP nix-collect-garbage  --delete-older-than 7d"
+ssh $TARGET_USER@$TARGET_IP nix-collect-garbage --delete-older-than 7d
