@@ -45,7 +45,10 @@ in {
     "d /home/ci/.ssh - ci wheel - -"
     "L+ /home/ci/.ssh/config - ci wheel - ${./ssh.config}"
   ];
-  nix.settings.max-jobs = 6;
+  nix.settings = {
+    max-jobs = 6;
+    trusted-users = ["root" "@wheel"];
+  };
   users.users.ci = {
     isNormalUser = true;
     extraGroups = ["wheel"];
