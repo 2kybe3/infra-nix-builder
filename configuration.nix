@@ -46,7 +46,7 @@ in {
     "L+ /home/ci/.ssh/config - ci wheel - ${./ssh.config}"
   ];
   nix.settings = {
-    max-jobs = 6;
+    max-jobs = 32;
     trusted-users = ["root" "@wheel"];
   };
   users.users.ci = {
