@@ -28,10 +28,9 @@ cd "$BUILD_DIR"
 echo_cmd "export NIX_SSHOPTS='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'"
 export NIX_SSHOPTS="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
-echo_cmd "nixos-rebuild switch --flake .#$TARGET_HOST --target-host $TARGET_USER@$TARGET_IP --upgrade --sudo --verbose"
+echo_cmd "nixos-rebuild switch --flake .#$TARGET_HOST --target-host $TARGET_USER@$TARGET_IP --upgrade --verbose"
 nixos-rebuild switch \
-    --flake .#$TARGET_HOST \
-    --target-host $TARGET_USER@$TARGET_IP \
+    --flake ".#$TARGET_HOST" \
+    --target-host "$TARGET_USER@$TARGET_IP" \
     --upgrade \
-    --sudo \
     --verbose

@@ -2,21 +2,35 @@
   self,
   pkgs,
   ...
-}: let
+}:
+let
   keys = [
     "nix_main"
     "nix_builder"
     "caddy_public_private"
   ];
-in {
+
+  build-script = pkgs.writeShellApplication {
+    name = "build";
+
+    runtimeInputs = with pkgs; [
+      git
+      jq
+    ];
+
+    text = builtins.readFile "${self}/assets/build.sh";
+  };
+in
+{
   imports = [
-    ./proxmox.nix
-    ./utils.nix
-    ./attic.nix
-    ./sops.nix
+    "${self}/modules/sops.nix"
+    "${self}/modules/utils.nix"
+    "${self}/modules/attic.nix"
+    "${self}/modules/proxmox.nix"
   ];
 
-  sops.secrets = builtins.listToAttrs (map (name: {
+  sops.secrets = builtins.listToAttrs (
+    map (name: {
       name = name;
       value = {
         sopsFile = "${self}/secrets/${name}";
@@ -24,34 +38,36 @@ in {
         format = "binary";
         owner = "ci";
       };
-    })
-    keys);
+    }) keys
+  );
 
   environment.systemPackages = with pkgs; [
-    gnupg
-    unzip
-    git
-    curl
-    vim
     jq
+    git
+    vim
+    curl
+    unzip
+    gnupg
 
-    (pkgs.writeShellScriptBin "build" ''
-      #!${pkgs.bash}/bin/bash
-      ${builtins.readFile ./build.sh}
-    '')
+    build-script
   ];
 
   systemd.tmpfiles.rules = [
     "d /home/ci/.ssh - ci wheel - -"
-    "L+ /home/ci/.ssh/config - ci wheel - ${./ssh.config}"
+    "L+ /home/ci/.ssh/config - ci wheel - ${"${self}/assets/ssh.config"}"
   ];
+
   nix.settings = {
     max-jobs = 32;
-    trusted-users = ["root" "@wheel"];
+    trusted-users = [
+      "root"
+      "@wheel"
+    ];
   };
+
   users.users.ci = {
     isNormalUser = true;
-    extraGroups = ["wheel"];
+    extraGroups = [ "wheel" ];
 
     openssh.authorizedKeys = {
       keys = [
@@ -63,6 +79,7 @@ in {
       ];
     };
   };
+
   security.sudo.wheelNeedsPassword = false;
 
   services.openssh = {

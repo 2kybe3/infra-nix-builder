@@ -3,7 +3,8 @@
   pkgs,
   config,
   ...
-}: {
+}:
+{
   sops.secrets.atticd = {
     sopsFile = "${self}/secrets/atticd.env.bin";
     format = "binary";
@@ -22,7 +23,7 @@
     settings = {
       listen = "[::]:8080";
 
-      jwt = {};
+      jwt = { };
 
       chunking = {
         # The minimum NAR size to trigger chunking

@@ -3,6 +3,12 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-25.11";
+    flake-utils.url = "github:numtide/flake-utils";
+
+    treefmt = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     sops-nix = {
       url = "github:Mic92/sops-nix";
@@ -10,26 +16,42 @@
     };
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    sops-nix,
-  }: let
-    system = "x86_64-linux";
-    pkgs = import nixpkgs {inherit system;};
-  in {
-    nixosConfigurations."nix-builder" = nixpkgs.lib.nixosSystem {
-      inherit system pkgs;
+  outputs =
+    {
+      self,
+      treefmt,
+      nixpkgs,
+      sops-nix,
+      flake-utils,
+      ...
+    }:
+    let
+      system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
+    in
+    {
+      nixosConfigurations."nix-builder" = nixpkgs.lib.nixosSystem {
+        inherit system pkgs;
 
-      specialArgs = {
-        inherit self system;
+        specialArgs = {
+          inherit self system;
+        };
+
+        modules = [
+          ./host/infra-nix-builder
+          sops-nix.nixosModules.sops
+        ];
       };
-
-      modules = [
-        ./configuration.nix
-        sops-nix.nixosModules.sops
-      ];
-    };
-    formatter.${system} = nixpkgs.legacyPackages.${system}.alejandra;
-  };
+    }
+    // flake-utils.lib.eachDefaultSystem (
+      system:
+      let
+        pkgs = nixpkgs.legacyPackages.${system};
+        treefmt-eval = treefmt.lib.evalModule pkgs ./treefmt.nix;
+      in
+      {
+        checks.formatting = treefmt-eval.config.build.check self;
+        formatter = treefmt-eval.config.build.wrapper;
+      }
+    );
 }
