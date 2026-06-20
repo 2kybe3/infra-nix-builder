@@ -8,6 +8,7 @@ let
     "nix_main"
     "nix_builder"
     "caddy_public_private"
+    "rusherhack_plugin_compiler"
   ];
 
   build-script = pkgs.writeShellApplication {
@@ -76,6 +77,7 @@ in
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDeptJ/WeiQ3wuCpkHYAfSdH5h5l6kbJFSkiM/g7pZjZ git.kybe.xyz (infra-caddy) -> nix-builder"
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOzHEdANrzJkiRCD+WdoGhJieehwxuuXevLaNUPp83Ki git.kybe.xyz (infra-nix-main) -> nix-builder"
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIODsU2Eyfj0bdNumTw9HW6yDukyNxNdc5q7JK7ONLeMm git.kybe.xyz (infra-nix-builder) -> nix-builder"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINkGo/tRIL/LXbY5kNDK4v8csBm2FRq9A1VhT0iK+cYu git.kybe.xyz (rusherhack-plugin-compiler) -> nix-builder"
       ];
     };
   };
