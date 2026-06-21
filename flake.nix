@@ -1,6 +1,4 @@
 {
-  description = "nix-builder";
-
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
@@ -31,9 +29,9 @@
     in
     {
       nixosConfigurations."nix-builder" = nixpkgs.lib.nixosSystem {
-        inherit system pkgs;
+        inherit pkgs;
 
-        specialArgs = {
+        specialArgs = self.packages.${system} // {
           inherit self system;
         };
 
@@ -47,9 +45,11 @@
       system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
+
         treefmt-eval = treefmt.lib.evalModule pkgs ./treefmt.nix;
       in
       {
+        packages.build-script = pkgs.callPackage ./assets/build-script { };
         checks.formatting = treefmt-eval.config.build.check self;
         formatter = treefmt-eval.config.build.wrapper;
       }
