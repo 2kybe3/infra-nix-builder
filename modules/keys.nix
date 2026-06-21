@@ -6,7 +6,7 @@ let
   keys = import "${self}/keys.nix";
   key_names = builtins.attrNames keys;
 
-  ssh_config = ''
+  ssh_config = builtins.toFile "ssh.config" ''
     Host *
       IdentitiesOnly yes
       ${builtins.concatStringsSep "\n" (map (name: "  IdentityFile ~/.ssh/${name}") key_names)}
