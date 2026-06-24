@@ -49,7 +49,7 @@
         treefmt-eval = treefmt.lib.evalModule pkgs ./treefmt.nix;
       in
       {
-        packages.build-script = pkgs.callPackage ./assets/build-script { };
+        packages.build-script = pkgs.callPackage ./build-script { };
         checks.formatting = treefmt-eval.config.build.check self;
         formatter = treefmt-eval.config.build.wrapper;
       }

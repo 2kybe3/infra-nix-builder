@@ -1,15 +1,19 @@
 {
+  lib,
   self,
   ...
 }:
 let
   keys = import "${self}/keys.nix";
-  key_names = builtins.attrNames keys;
 
   ssh_config = builtins.toFile "ssh.config" ''
-    Host *
-      IdentitiesOnly yes
-      ${builtins.concatStringsSep "\n" (map (name: "  IdentityFile ~/.ssh/${name}") key_names)}
+    ${builtins.concatStringsSep "\n" (
+      lib.mapAttrsToList (name: value: ''
+        Host ${value.hosts}
+          IdentitiesOnly yes
+          IdentityFile ~/.ssh/${name}
+      '') keys
+    )}
   '';
 in
 {
@@ -23,7 +27,7 @@ in
         mode = "0600";
         owner = "ci";
       };
-    }) key_names
+    }) (builtins.attrNames keys)
   );
 
   systemd.tmpfiles.settings."ssh-ci-provision" = {

@@ -11,6 +11,7 @@
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOzHEdANrzJkiRCD+WdoGhJieehwxuuXevLaNUPp83Ki git.kybe.xyz (infra-nix-main) -> nix-builder"
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIODsU2Eyfj0bdNumTw9HW6yDukyNxNdc5q7JK7ONLeMm git.kybe.xyz (infra-nix-builder) -> nix-builder"
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINkGo/tRIL/LXbY5kNDK4v8csBm2FRq9A1VhT0iK+cYu git.kybe.xyz (rusherhack-plugin-compiler) -> nix-builder"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFU07bnRcsheWvKeqagZg6Fgd3r3FIdu9Snf8T1XLVSd git.kybe.xyz (dns) -> nix-builder"
       ];
     };
   };
